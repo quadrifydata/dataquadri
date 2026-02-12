@@ -3,17 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mapa simples</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-  <style>html,body{height:100%;margin:0} #map{height:100%;width:100%}</style>
+  <title>Dataquadri — Mapas publicados</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    h1 { margin: 0 0 8px 0; }
+    .muted { color: #666; margin-bottom: 16px; }
+    ul { line-height: 1.7; }
+    code { background: #f4f4f4; padding: 2px 6px; border-radius: 6px; }
+  </style>
 </head>
 <body>
-<div id="map"></div>
-<script>
-  const map = L.map('map').setView([-25.43, -49.26], 12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19}).addTo(map);
-  L.marker([-25.43, -49.26]).addTo(map).bindPopup("Publicado via Jupyter ✅").openPopup();
-</script>
+  <h1>Dataquadri — Mapas publicados</h1>
+  <div class="muted">Gerado automaticamente pelo Jupyter. Última atualização: <code>2026-02-12 16:00:52</code></div>
+  <h2>Mapas</h2>
+  <ul>
+    <li><a href="mapas/mapa_random_20260212_160011.html">mapa_random_20260212_160011.html</a></li>
+  </ul>
 </body>
 </html>
