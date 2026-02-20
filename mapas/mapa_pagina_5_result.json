@@ -1,0 +1,20 @@
+{
+  "municipio": "arapongas",
+  "tipo_mapa": "ideal",
+  "nome_arquivo": "mapa_pagina_5",
+  "html_local_path": "C:\\Users\\Alisson\\dataquadri\\mapas\\mapa_pagina_5.html",
+  "publicado": true,
+  "url_publicada": "https://quadrifydata.github.io/dataquadri/mapas/mapa_pagina_5.html",
+  "coverage": {
+    "total_poligonos": 195,
+    "verde_qtd": 2,
+    "azul_qtd": 79,
+    "branco_qtd": 114,
+    "verde_pct": 1.0256410256410255,
+    "azul_pct": 40.51282051282051,
+    "branco_pct": 58.46153846153846
+  },
+  "texto_resumo": "No modo sintetizado (Ideal/Sub-ideal), analisamos 195 polígonos no município de Arapongas. Desse total, 1.0% (2) aparecem como **Ideal (verde)**, 40.5% (79) como **Sub-ideal (azul)** e 58.5% (114) ficam em **branco** (fora das áreas-alvo).",
+  "df_pontos_ideal_csv": "C:\\Users\\Alisson\\dataquadri\\mapas\\mapa_pagina_5_pontos.csv",
+  "meta_json_path": null
+}
