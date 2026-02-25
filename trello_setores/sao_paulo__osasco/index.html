@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trello de Setores — Osasco (São Paulo)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <style>
+    :root {
+      --bg0:#060913; --bg1:#0b1022;
+      --card: rgba(255,255,255,0.05);
+      --border: rgba(255,255,255,0.10);
+      --text: #e5e7eb;
+      --muted:#a7b0c0;
+      --accent:#38bdf8;
+
+      --indicado:#22c55e;
+      --potencial:#3b82f6;
+      --basico:#f59e0b;
+      --fraco:#ef4444;
+      --sem:#94a3b8;
+    }
+    *{box-sizing:border-box;}
+    body {
+      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(1100px 500px at 90% 10%, rgba(59,130,246,0.16), transparent 50%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      color: var(--text);
+      height:100vh; overflow:hidden;
+    }
+    .topbar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+    }
+    .title{display:flex; flex-direction:column; gap:4px;}
+    .title h1{margin:0; font-size:18px; color:var(--accent); font-weight:800;}
+    .title .sub{font-size:12.5px; color:var(--muted); font-weight:700;}
+    .actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+    .btn {
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding:10px 12px; border-radius:10px;
+      font-weight:900; cursor:pointer; font-size:12.5px;
+    }
+    .btn.primary {
+      background: linear-gradient(180deg, rgba(59,130,246,1), rgba(37,99,235,1));
+      box-shadow: 0 10px 24px rgba(37,99,235,0.22);
+    }
+    .btn.danger {
+      background: rgba(239,68,68,0.12);
+      border-color: rgba(239,68,68,0.28);
+    }
+    .file{display:none;}
+
+    .layout{display:grid; grid-template-columns:1.55fr 1fr; height:calc(100vh - 62px);}
+    #map{height:100%; width:100%;}
+    .panel{border-left:1px solid rgba(255,255,255,0.08); padding:14px; overflow:auto;}
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.30);
+      margin-bottom: 12px;
+    }
+    .cardTitle {
+      margin:0 0 10px 0;
+      font-size:12px; letter-spacing:.12em;
+      text-transform:uppercase; color:rgba(229,231,235,0.85); font-weight:900;
+    }
+    .stats{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+    .stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .stat .k {
+      font-size: 11px; letter-spacing: .10em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 6px; font-weight: 900;
+    }
+    .stat .v {font-size:15px; font-weight:900; color:var(--text);}
+
+    .hint{color:var(--muted); font-size:12.5px; line-height:1.5; font-weight:600;}
+    .formRow{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
+    .field{display:flex; flex-direction:column; gap:6px;}
+    label{font-size:11px; color:var(--muted); font-weight:900; letter-spacing:.08em; text-transform:uppercase;}
+    select,input,textarea {
+      border-radius:12px; border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 10px; outline:none;
+      font-weight:800; font-size:13px;
+    }
+    textarea{min-height:74px; resize:vertical; font-weight:700;}
+
+    .board{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+    .col{background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:16px; overflow:hidden;}
+    .colHead {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 12px; border-bottom:1px solid rgba(255,255,255,0.08);
+      font-weight:900; font-size:12px; letter-spacing:.10em; text-transform:uppercase;
+    }
+    .pill{font-size:11px; font-weight:900; padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.06);}
+    .list{max-height:260px; overflow:auto; padding:10px; display:flex; flex-direction:column; gap:8px;}
+    .cardMini {
+      cursor:pointer;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .cardMini .id{font-weight:900; font-size:12.5px;}
+    .cardMini .meta{margin-top:6px; display:flex; justify-content:space-between; color:var(--muted); font-size:12px; font-weight:900;}
+
+    @media (max-width: 980px) {
+      .layout{grid-template-columns:1fr;}
+      .panel{height:46vh; border-left:0; border-top:1px solid rgba(255,255,255,0.08);}
+      #map{height:54vh;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="title">
+      <h1>Trello de Setores — Osasco (São Paulo)</h1>
+      <div class="sub">Clique no setor para classificar e registrar expectativa de votos (salvo no seu navegador).</div>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="btnExport">Exportar marcações (JSON)</button>
+      <label class="btn" for="fileImport">Importar JSON</label>
+      <input class="file" type="file" id="fileImport" accept="application/json" />
+      <button class="btn danger" id="btnReset">Zerar cidade (local)</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div id="map"></div>
+    <div class="panel">
+      <div class="card">
+        <div class="cardTitle">Resumo</div>
+        <div class="stats">
+          <div class="stat"><div class="k">Setores carregados</div><div class="v" id="stTotal">—</div></div>
+          <div class="stat"><div class="k">Votos somados</div><div class="v" id="stVotes">—</div></div>
+          <div class="stat"><div class="k">Marcados</div><div class="v" id="stMarked">—</div></div>
+          <div class="stat"><div class="k">Sem marcação</div><div class="v" id="stUnmarked">—</div></div>
+        </div>
+        <div style="margin-top:10px" class="hint">
+          Clique no setor no mapa ou em um cartão do board para editar. Salva automaticamente no navegador.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle">Editor do setor</div>
+        <div class="hint" style="margin-bottom:10px">
+          Setor selecionado: <span id="selId" style="color: var(--accent); font-weight: 900;">—</span>
+        </div>
+
+        <div class="formRow">
+          <div class="field">
+            <label>Status</label>
+            <select id="fStatus">
+              <option value="">(Sem marcação)</option>
+              <option value="Indicado">Indicado</option>
+              <option value="Potencial">Potencial</option>
+              <option value="Básico">Básico</option>
+              <option value="Fraco">Fraco</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Expectativa de votos</label>
+            <input id="fVotes" type="number" min="0" step="1" placeholder="Ex: 25" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Notas (opcional)</label>
+          <textarea id="fNotes" placeholder="Ex: lideranças, ações, observações..."></textarea>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <button class="btn primary" id="btnSave">Salvar</button>
+          <button class="btn" id="btnClear">Limpar setor</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle">Board</div>
+        <div class="board">
+          <div class="col">
+            <div class="colHead">Indicado <span class="pill" id="pillIndicado">0</span></div>
+            <div class="list" id="listIndicado"></div>
+          </div>
+          <div class="col">
+            <div class="colHead">Potencial <span class="pill" id="pillPotencial">0</span></div>
+            <div class="list" id="listPotencial"></div>
+          </div>
+          <div class="col">
+            <div class="colHead">Básico <span class="pill" id="pillBasico">0</span></div>
+            <div class="list" id="listBasico"></div>
+          </div>
+          <div class="col">
+            <div class="colHead">Fraco <span class="pill" id="pillFraco">0</span></div>
+            <div class="list" id="listFraco"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const GEOJSON_URL = "./setores.geojson";
+    const STORAGE_KEY = "quadrify_trello_v1::sao_paulo::osasco";
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { marks: {} };
+        const obj = JSON.parse(raw);
+        if (!obj || typeof obj !== "object") return { marks: {} };
+        if (!obj.marks) obj.marks = {};
+        return obj;
+      } catch (e) {
+        return { marks: {} };
+      }
+    }
+    function saveState(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    let state = loadState();
+    let selectedId = null;
+
+    const map = L.map('map').setView([-23.535275499999955, -46.78461539999995], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    let geoLayer = null;
+    const layerById = new Map();
+    const allIds = [];
+
+    function colorByStatus(status) {
+      const css = getComputedStyle(document.documentElement);
+      if (status === "Indicado") return css.getPropertyValue('--indicado').trim();
+      if (status === "Potencial") return css.getPropertyValue('--potencial').trim();
+      if (status === "Básico") return css.getPropertyValue('--basico').trim();
+      if (status === "Fraco") return css.getPropertyValue('--fraco').trim();
+      return css.getPropertyValue('--sem').trim();
+    }
+
+    function styleFeature(feature) {
+      const id = feature.properties.ID_SETOR;
+      const mark = state.marks[id] || {};
+      const status = mark.status || "";
+      return {
+        color: "rgba(255,255,255,0.25)",
+        weight: 1,
+        fillColor: colorByStatus(status),
+        fillOpacity: status ? 0.52 : 0.10
+      };
+    }
+
+    function tooltipText(id) {
+      const m = state.marks[id] || {};
+      const st = m.status || "Sem marcação";
+      const votes = (m.votes ?? "");
+      const vtxt = (votes !== "" && votes !== null && votes !== undefined) ? ` · Votos: ${votes}` : "";
+      return `<b>${id}</b><br>${st}${vtxt}`;
+    }
+
+    function selectSector(id) {
+      selectedId = id;
+      document.getElementById("selId").textContent = id;
+
+      const m = state.marks[id] || {};
+      document.getElementById("fStatus").value = m.status || "";
+      document.getElementById("fVotes").value = (m.votes ?? "") === null ? "" : (m.votes ?? "");
+      document.getElementById("fNotes").value = m.notes || "";
+
+      const layer = layerById.get(id);
+      if (layer) {
+        map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+        layer.setStyle({ weight: 2, color: "rgba(255,255,255,0.55)" });
+        setTimeout(() => layer.setStyle(styleFeature(layer.feature)), 1200);
+      }
+    }
+
+    function upsertMark(id, status, votes, notes) {
+      if (!state.marks) state.marks = {};
+      if (!status && (votes === "" || votes === null || votes === undefined) && !notes) {
+        delete state.marks[id];
+      } else {
+        state.marks[id] = {
+          status: status || "",
+          votes: (votes === "" || votes === null || votes === undefined) ? "" : Number(votes),
+          notes: notes || "",
+          updatedAt: new Date().toISOString()
+        };
+      }
+      saveState(state);
+    }
+
+    function refreshMapStyles() {
+      if (!geoLayer) return;
+      geoLayer.eachLayer(l => {
+        l.setStyle(styleFeature(l.feature));
+        const id = l.feature.properties.ID_SETOR;
+        l.bindTooltip(tooltipText(id), { sticky: true, direction: "top" });
+      });
+    }
+
+    function buildMiniCard(id) {
+      const m = state.marks[id] || {};
+      const votes = (m.votes ?? "");
+      const vtxt = (votes !== "" && votes !== null && votes !== undefined) ? String(votes) : "—";
+      const el = document.createElement("div");
+      el.className = "cardMini";
+      el.innerHTML = `
+        <div class="id">${id}</div>
+        <div class="meta">
+          <span>${m.status || "Sem"}</span>
+          <span>Votos: ${vtxt}</span>
+        </div>
+      `;
+      el.addEventListener("click", () => selectSector(id));
+      return el;
+    }
+
+    function refreshBoardAndStats() {
+      const lists = {
+        "Indicado": document.getElementById("listIndicado"),
+        "Potencial": document.getElementById("listPotencial"),
+        "Básico": document.getElementById("listBasico"),
+        "Fraco": document.getElementById("listFraco"),
+      };
+      for (const k in lists) lists[k].innerHTML = "";
+
+      let counts = { "Indicado":0, "Potencial":0, "Básico":0, "Fraco":0 };
+      let votesSum = 0;
+      let marked = 0;
+
+      for (const id of allIds) {
+        const m = state.marks[id];
+        if (!m || !m.status) continue;
+
+        marked += 1;
+        const st = m.status;
+        if (counts[st] === undefined) continue;
+
+        counts[st] += 1;
+        const v = m.votes;
+        if (typeof v === "number" && !isNaN(v)) votesSum += v;
+
+        lists[st].appendChild(buildMiniCard(id));
+      }
+
+      document.getElementById("pillIndicado").textContent = counts["Indicado"];
+      document.getElementById("pillPotencial").textContent = counts["Potencial"];
+      document.getElementById("pillBasico").textContent = counts["Básico"];
+      document.getElementById("pillFraco").textContent = counts["Fraco"];
+
+      document.getElementById("stTotal").textContent = allIds.length;
+      document.getElementById("stVotes").textContent = votesSum.toLocaleString("pt-BR");
+      document.getElementById("stMarked").textContent = marked.toLocaleString("pt-BR");
+      document.getElementById("stUnmarked").textContent = (allIds.length - marked).toLocaleString("pt-BR");
+    }
+
+    document.getElementById("btnSave").addEventListener("click", () => {
+      if (!selectedId) return alert("Selecione um setor no mapa.");
+      const status = document.getElementById("fStatus").value;
+      const votes = document.getElementById("fVotes").value;
+      const notes = document.getElementById("fNotes").value;
+      upsertMark(selectedId, status, votes, notes);
+      refreshMapStyles();
+      refreshBoardAndStats();
+    });
+
+    document.getElementById("btnClear").addEventListener("click", () => {
+      if (!selectedId) return alert("Selecione um setor no mapa.");
+      upsertMark(selectedId, "", "", "");
+      document.getElementById("fStatus").value = "";
+      document.getElementById("fVotes").value = "";
+      document.getElementById("fNotes").value = "";
+      refreshMapStyles();
+      refreshBoardAndStats();
+    });
+
+    document.getElementById("btnReset").addEventListener("click", () => {
+      const ok = confirm("Apaga todas as marcações desta cidade no seu navegador. Continuar?");
+      if (!ok) return;
+      localStorage.removeItem(STORAGE_KEY);
+      state = loadState();
+      refreshMapStyles();
+      refreshBoardAndStats();
+    });
+
+    document.getElementById("btnExport").addEventListener("click", () => {
+      const payload = {
+        storageKey: STORAGE_KEY,
+        exportedAt: new Date().toISOString(),
+        marks: state.marks || {}
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `marcacoes_${STORAGE_KEY.replace(/[^a-z0-9_\-:]+/gi,'_')}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("fileImport").addEventListener("change", async (ev) => {
+      const file = ev.target.files?.[0];
+      if (!file) return;
+      try {
+        const raw = await file.text();
+        const obj = JSON.parse(raw);
+        if (!obj || !obj.marks) return alert("JSON inválido (faltou 'marks').");
+        state.marks = { ...(state.marks || {}), ...(obj.marks || {}) };
+        saveState(state);
+        refreshMapStyles();
+        refreshBoardAndStats();
+        alert("Importado com sucesso.");
+      } catch (e) {
+        alert("Erro ao importar JSON.");
+      } finally {
+        ev.target.value = "";
+      }
+    });
+
+    async function init() {
+      const res = await fetch(GEOJSON_URL);
+      if (!res.ok) throw new Error("Falha ao carregar GeoJSON");
+      const gj = await res.json();
+
+      geoLayer = L.geoJSON(gj, {
+        style: styleFeature,
+        onEachFeature: (feature, layer) => {
+          const id = feature.properties.ID_SETOR;
+          layerById.set(id, layer);
+          allIds.push(id);
+          layer.bindTooltip(tooltipText(id), { sticky: true, direction: "top" });
+          layer.on("click", () => selectSector(id));
+        }
+      }).addTo(map);
+
+      try { map.fitBounds(geoLayer.getBounds(), { padding: [18,18] }); } catch (e) {}
+      refreshBoardAndStats();
+    }
+
+    init().catch(err => {
+      alert("Erro ao carregar o mapa. Verifique se o GeoJSON está na mesma pasta do HTML (GitHub Pages).");
+      console.error(err);
+    });
+  </script>
+</body>
+</html>
