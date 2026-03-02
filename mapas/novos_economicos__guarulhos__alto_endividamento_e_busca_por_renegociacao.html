@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_9a531dfbfe6f166e6f22e3011aacf630 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    
+                    <style>
+                        .foliumtooltip {
+                            
+                        }
+                       .foliumtooltip table{
+                            margin: auto;
+                        }
+                        .foliumtooltip tr{
+                            text-align: left;
+                        }
+                        .foliumtooltip th{
+                            padding: 2px; padding-right: 8px;
+                        }
+                    </style>
+            
+    
+                    <style>
+                        .foliumpopup {
+                            margin: auto;
+                        }
+                       .foliumpopup table{
+                            margin: auto;
+                        }
+                        .foliumpopup tr{
+                            text-align: left;
+                        }
+                        .foliumpopup th{
+                            padding: 2px; padding-right: 8px;
+                        }
+                    </style>
+            
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_9a531dfbfe6f166e6f22e3011aacf630" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_9a531dfbfe6f166e6f22e3011aacf630 = L.map(
+                "map_9a531dfbfe6f166e6f22e3011aacf630",
+                {
+                    center: [-23.391975599999967, -46.438140665660654],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_d12e7e6fe47afade8c5105a87280f538 = L.tileLayer(
+                "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca target=\"_blank\" href=\"http://cartodb.com/attributions\"\u003eCartoDB\u003c/a\u003e, CartoDB \u003ca target=\"_blank\" href =\"http://cartodb.com/attributions\"\u003eattributions\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_9a531dfbfe6f166e6f22e3011aacf630);
+        
+    
+        function geo_json_2cc1f0b8b57934f0093b044ef1a2c35f_styler(feature) {
+            switch(feature.id) {
+                case "5": 
+                    return {"color": "#111111", "fillColor": "#2ca25f", "fillOpacity": 0.85, "weight": 1.8};
+                default:
+                    return {"color": "#111111", "fillColor": "#3182bd", "fillOpacity": 0.85, "weight": 1.8};
+            }
+        }
+
+        function geo_json_2cc1f0b8b57934f0093b044ef1a2c35f_onEachFeature(feature, layer) {
+            layer.on({
+            });
+        };
+        var geo_json_2cc1f0b8b57934f0093b044ef1a2c35f = L.geoJson(null, {
+                onEachFeature: geo_json_2cc1f0b8b57934f0093b044ef1a2c35f_onEachFeature,
+            
+                style: geo_json_2cc1f0b8b57934f0093b044ef1a2c35f_styler,
+        });
+
+        function geo_json_2cc1f0b8b57934f0093b044ef1a2c35f_add (data) {
+            geo_json_2cc1f0b8b57934f0093b044ef1a2c35f
+                .addData(data)
+                .addTo(map_9a531dfbfe6f166e6f22e3011aacf630);
+        }
+            geo_json_2cc1f0b8b57934f0093b044ef1a2c35f_add({"features": [{"geometry": {"coordinates": [[[-46.43674229999993, -23.38913909999997], [-46.43849129999995, -23.39044549999994], [-46.43843849999996, -23.39138809999997], [-46.43908249999998, -23.39185319999996], [-46.44018749999998, -23.39050869999994], [-46.43955339999997, -23.39000039999996], [-46.43902239999994, -23.39007619999995], [-46.43854099999993, -23.39002499999998], [-46.43767959999997, -23.38942369999995], [-46.43701399999998, -23.38880019999993], [-46.43674229999993, -23.38913909999997]]], "type": "Polygon"}, "id": "0", "properties": {"CD_setor": "351880005000913", "Classe_Quartil": 4, "Ideal_verde": false, "NM_BAIRRO": "S\u00e3o Jo\u00e3o", "Peso_Moradores": 1.0, "Subideal_azul": true, "Valor": 1.0, "Valor_Ajustado": 1.0, "oportunidade": 3}, "type": "Feature"}, {"geometry": {"coordinates": [[[-46.49302599999999, -23.42548499999998], [-46.49320279999995, -23.42549629999996], [-46.49530389999995, -23.42692549999998], [-46.49559699999998, -23.42664799999994], [-46.49590369999999, -23.42660579999995], [-46.49584709999993, -23.42650219999996], [-46.49558369999994, -23.42645259999995], [-46.49295929999994, -23.42468059999993], [-46.49282179999994, -23.42471089999998], [-46.49219259999995, -23.42382889999993], [-46.49185699999998, -23.42378299999996], [-46.49242499999997, -23.42438999999996], [-46.49302599999999, -23.42548499999998]]], "type": "Polygon"}, "id": "1", "properties": {"CD_setor": "351880005001139", "Classe_Quartil": 4, "Ideal_verde": false, "NM_BAIRRO": "Tabo\u00e3o", "Peso_Moradores": 1.0, "Subideal_azul": true, "Valor": 1.0, "Valor_Ajustado": 1.0, "oportunidade": 3}, "type": "Feature"}, {"geometry": {"coordinates": [[[-46.44060829999995, -23.47166619999996], [-46.44104169999997, -23.47214369999995], [-46.44148419999993, -23.47282579999995], [-46.44180549999993, -23.47350959999994], [-46.44161289999994, -23.47460149999995], [-46.44177819999993, -23.47463129999994], [-46.44192899999996, -23.47424999999993], [-46.44205099999994, -23.47356999999994], [-46.44188799999995, -23.47284299999995], [-46.44160499999998, -23.47240899999997], [-46.44079629999993, -23.47171539999994], [-46.44066189999995, -23.47149649999994], [-46.44060829999995, -23.47166619999996]]], "type": "Polygon"}, "id": "2", "properties": {"CD_setor": "351880010000107", "Classe_Quartil": 4, "Ideal_verde": false, "NM_BAIRRO": "Pimentas", "Peso_Moradores": 0.85, "Subideal_azul": true, "Valor": 1.0, "Valor_Ajustado": 0.85, "oportunidade": 3}, "type": "Feature"}, {"geometry": {"coordinates": [[[-46.42909329999998, -23.40478999999993], [-46.43002499999994, -23.40672399999994], [-46.43035659999998, -23.40719119999994], [-46.43275489999996, -23.40580819999997], [-46.43140999999997, -23.40474179999995], [-46.43098699999996, -23.40426799999995], [-46.43079439999997, -23.40375559999995], [-46.43063679999995, -23.40358329999998], [-46.42979699999995, -23.40411809999995], [-46.42955619999998, -23.40435309999998], [-46.42934939999998, -23.40442619999993], [-46.42909329999998, -23.40478999999993]]], "type": "Polygon"}, "id": "3", "properties": {"CD_setor": "351880010000408", "Classe_Quartil": 4, "Ideal_verde": false, "NM_BAIRRO": "Bonsucesso", "Peso_Moradores": 1.0, "Subideal_azul": true, "Valor": 1.0, "Valor_Ajustado": 1.0, "oportunidade": 3}, "type": "Feature"}, {"geometry": {"coordinates": [[[-46.46755299999995, -23.45029899999997], [-46.46796489999997, -23.45210269999995], [-46.46806169999996, -23.45224889999997], [-46.46788729999997, -23.45248859999998], [-46.46863369999994, -23.45281989999995], [-46.46875199999994, -23.45232699999997], [-46.46802949999994, -23.44998279999993], [-46.46747099999993, -23.44975199999993], [-46.46755299999995, -23.45029899999997]]], "type": "Polygon"}, "id": "4", "properties": {"CD_setor": "351880010000609", "Classe_Quartil": 4, "Ideal_verde": false, "NM_BAIRRO": "Cumb\u00edca", "Peso_Moradores": 0.85, "Subideal_azul": true, "Valor": 1.0, "Valor_Ajustado": 0.85, "oportunidade": 3}, "type": "Feature"}, {"geometry": {"coordinates": [[[-46.40025959999997, -23.46661119999993], [-46.40236019999998, -23.46699719999998], [-46.40246129999997, -23.46608389999994], [-46.40230059999993, -23.46556259999994], [-46.40213969999996, -23.46540889999994], [-46.40139419999997, -23.46527789999993], [-46.40124589999994, -23.46517109999996], [-46.40049449999998, -23.46508679999994], [-46.40025959999997, -23.46661119999993]]], "type": "Polygon"}, "id": "5", "properties": {"CD_setor": "351880010000965", "Classe_Quartil": 4, "Ideal_verde": true, "NM_BAIRRO": "Ita\u00edm", "Peso_Moradores": 0.85, "Subideal_azul": false, "Valor": 1.0, "Valor_Ajustado": 0.85, "oportunidade": 4}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+    geo_json_2cc1f0b8b57934f0093b044ef1a2c35f.bindTooltip(
+    function(layer){
+    let div = L.DomUtil.create('div');
+    
+    let handleObject = feature=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
+    let fields = ["CD_setor", "NM_BAIRRO", "oportunidade", "Valor", "Peso_Moradores", "Valor_Ajustado", "Classe_Quartil"];
+    let aliases = ["Setor:", "Bairro:", "Oportunidade:", "Valor (bruto):", "Peso moradores:", "Valor (ajustado):", "Quartil (ajustado):"];
+    let table = '<table>' +
+        String(
+        fields.map(
+        (v,i)=>
+        `<tr>
+            <th>${aliases[i].toLocaleString()}</th>
+            
+            <td>${handleObject(layer.feature.properties[v]).toLocaleString()}</td>
+        </tr>`).join(''))
+    +'</table>';
+    div.innerHTML=table;
+    
+    return div
+    }
+    ,{"className": "foliumtooltip", "sticky": true});
+                     
+    
+    geo_json_2cc1f0b8b57934f0093b044ef1a2c35f.bindPopup(
+    function(layer){
+    let div = L.DomUtil.create('div');
+    
+    let handleObject = feature=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
+    let fields = ["CD_setor", "NM_BAIRRO", "oportunidade", "Valor", "Peso_Moradores", "Valor_Ajustado", "Classe_Quartil"];
+    let aliases = ["Setor:", "Bairro:", "Oportunidade:", "Valor (bruto):", "Peso moradores:", "Valor (ajustado):", "Quartil (ajustado):"];
+    let table = '<table>' +
+        String(
+        fields.map(
+        (v,i)=>
+        `<tr>
+            <th>${aliases[i].toLocaleString()}</th>
+            
+            <td>${handleObject(layer.feature.properties[v]).toLocaleString()}</td>
+        </tr>`).join(''))
+    +'</table>';
+    div.innerHTML=table;
+    
+    return div
+    }
+    ,{"className": "foliumpopup", "maxWidth": 900});
+                     
+</script>
+</html>
